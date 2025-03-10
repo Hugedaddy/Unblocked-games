@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classroom Learning Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Study Mode Styles */
+        .study-mode {
+            background-color: #f5f5f5;
+            color: #333;
+            padding-top: 60px;
+        }
+
+        /* Gaming Mode Styles */
+        .gaming-mode {
+            background-color: #1a1a1a;
+            color: white;
+            display: none;
+            padding-top: 60px;
+        }
+
+        /* Navigation Styles */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .nav-bar a {
+            color: #333;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .nav-bar a:hover {
+            background: #f0f0f0;
+        }
+
+        /* Logo Styles */
+        .logo-home {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-home img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .logo-home span {
+            color: #333;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        /* Content Grid Styles */
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .game-card {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Warning Dialog Styles */
+        .external-link-warning {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            z-index: 2000;
+            text-align: center;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1999;
+        }
+
+        /* Button Styles */
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #4CAF50;
+            color: white;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        /* Quick Hide Button */
+        .quick-hide {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ff4444;
+            z-index: 1000;
+        }
+
+        /* Study Content Styles */
+        .study-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .study-content h2 {
+            margin: 20px 0;
+            color: #2c3e50;
+        }
+
+        .study-content ul {
+            list-style-position: inside;
+            margin: 10px 0;
+        }
+
+        .study-content li {
+            padding: 5px 0;
+        }
+    </style>
+</head>
+<body class="study-mode">
+    <!-- Warning Dialog -->
+    <div class="overlay" id="overlay"></div>
+    <div class="external-link-warning" id="warningDialog">
+        <h3>Leaving Current Page</h3>
+        <p>You are about to visit: www.classroomubg.com/home</p>
+        <p>Continue?</p>
+        <button onclick="proceedToClassroom()">Yes</button>
+        <button onclick="closeWarning()">No</button>
+    </div>
+
+    <!-- Navigation -->
+    <a href="https://www.classroomubg.com/home" class="logo-home" onclick="showWarning(event)">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTIgMkw2IDhWMjJIMThWOEwxMiAyWiIgZmlsbD0iIzMzMyIvPjwvc3ZnPg==" alt="Home">
+        <span>Classroom UBG</span>
+    </a>
+
+    <nav class="nav-bar">
+        <a href="https://www.classroomubg.com/home" onclick="showWarning(event)">Home</a>
+        <a href="https://www.classroomubg.com/resources" onclick="showWarning(event)">Resources</a>
+        <a href="https://www.classroomubg.com/assignments" onclick="showWarning(event)">Assignments</a>
+        <a href="https://www.classroomubg.com/calendar" onclick="showWarning(event)">Calendar</a>
+        <a href="https://www.classroomubg.com/grades" onclick="showWarning(event)">Grades</a>
+    </nav>
+
+    <!-- Quick Hide Button -->
+    <button onclick="quickHide()" class="quick-hide">Hide (ESC)</button>
+
+    <!-- Study Content -->
+    <div id="studyContent">
+        <div class="study-content">
+            <h2>Current Assignments</h2>
+            <ul>
+                <li>Week 1 Homework</li>
+                <li>Group Project</li>
+                <li>Reading Assignment</li>
+            </ul>
+
+            <h2>Class Resources</h2>
+            <ul>
+                <li>Study Guides</li>
+                <li>Practice Tests</li>
+                <li>Reference Materials</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Gaming Content -->
+    <div id="gamingContent" class="gaming-mode">
+        <div class="game-grid">
+            <!-- Game cards will be dynamically loaded -->
+        </div>
+    </div>
+
+    <script>
+        function proceedToClassroom() {
+            window.location.href = 'https://www.classroomubg.com/home';
+        }
+
+        function showWarning(event) {
+            event.preventDefault();
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('warningDialog').style.display = 'block';
+        }
+
+        function closeWarning() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('warningDialog').style.display = 'none';
+        }
+
+        function toggleView() {
+            const studyContent = document.getElementById('studyContent');
+            const gamingContent = document.getElementById('gamingContent');
+
+            if (studyContent.style.display === 'none') {
+                studyContent.style.display = 'block';
+                gamingContent.style.display = 'none';
+                document.body.className = 'study-mode';
+            } else {
+                studyContent.style.display = 'none';
+                gamingContent.style.display = 'block';
+                document.body.className = 'gaming-mode';
+            }
+        }
+
+        function quickHide() {
+            document.getElementById('studyContent').style.display = 'block';
+            document.getElementById('gamingContent').style.display = 'none';
+            document.body.className = 'study-mode';
+            closeWarning();
+        }
+
+        // Key combination listener
+        let keys = [];
+        document.addEventListener('keydown', function(event) {
+            keys.push(event.key);
+            if (keys.length > 3) keys.shift();
+
+            if (keys.join('') === 'abc') {
+                document.getElementById('studyContent').style.display = 'none';
+                document.getElementById('gamingContent').style.display = 'block';
+                document.body.className = 'gaming-mode';
+            }
+        });
+
+        // ESC key listener
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                quickHide();
+            }
+        });
+    </script>
+</body>
+</html>
